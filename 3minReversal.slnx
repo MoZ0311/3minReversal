@@ -2,5 +2,5 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="3minReversal.vcxproj" />
+  <Project Path="3minReversal.vcxproj" Id="7222d4dd-8e91-4c57-a930-1308ea56e687" />
 </Solution>
