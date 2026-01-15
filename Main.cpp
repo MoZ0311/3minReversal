@@ -1,5 +1,6 @@
 ﻿# include "Common.hpp"
 # include "Title.hpp"
+# include "Game.hpp"
 
 void Main()
 {
@@ -14,6 +15,7 @@ void Main()
 	// --- シーンの設定 ---
 	App manager;
 	manager.add<Title>(U"Title");
+	manager.add<Game>(U"Game");
 
 	// --- ゲームループ ---
 	while (System::Update())
