@@ -115,6 +115,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -328,6 +329,7 @@
   <ItemGroup>
     <ClInclude Include="PlayerInput.hpp" />
     <ClInclude Include="Common.hpp" />
+    <ClInclude Include="Game.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Title.hpp" />
   </ItemGroup>
