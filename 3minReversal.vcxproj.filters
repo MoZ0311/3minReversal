@@ -812,6 +812,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerInput.hpp">
     <ClInclude Include="Title.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
