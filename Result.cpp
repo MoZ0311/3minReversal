@@ -2,12 +2,47 @@
 
 Result::Result(const InitData& init)
 	: IScene{ init }
+	// メンバ変数の初期化（安全のためデフォルト値を入れておく）
+	, m_bgColor(Palette::Black)
+	, m_textColor(Palette::White)
 {
+	const GameResult result = getData().result;
+
+	// ★ 判定ロジックをここに移動
+	// draw() の中身がスッキリし、処理も1回だけで済みます
+	switch (result)
+	{
+	case GameResult::Clear:
+		m_titleText = U"MISSION CLEAR";
+		m_subText = U"残り時間: " + Fmt(U"{:.2f}")(getData().remainingTime) + U"秒";
+		m_bgColor = Palette::White;
+		m_textColor = Palette::Black;
+		break;
+
+	case GameResult::TimeUp:
+		m_titleText = U"TIME OVER";
+		m_subText = U"作戦失敗：時間切れ";
+		m_bgColor = Palette::Black;
+		m_textColor = Palette::Red;
+		break;
+
+	case GameResult::Explosion:
+		m_titleText = U"YOU DIED";
+		m_subText = U"作戦失敗：爆発";
+		m_bgColor = Palette::Red;
+		m_textColor = Palette::Black;
+		break;
+
+	default:
+		// 万が一データがない場合の保険
+		m_titleText = U"ERROR";
+		m_bgColor = Palette::Gray;
+		break;
+	}
 }
 
 void Result::update()
 {
-	// クリックまたはエンターでタイトルへ戻る
 	if (MouseL.down() || KeyEnter.down())
 	{
 		changeScene(U"Title");
@@ -16,45 +51,16 @@ void Result::update()
 
 void Result::draw() const
 {
-	const GameResult result = getData().result;
+	// ★ drawは「表示するだけ」にする（超高速！）
 
-	// 結果に応じてメッセージと背景色を変える
-	String titleText;
-	String subText;
-	ColorF bgColor;
-	ColorF textColor;
+	Scene::SetBackground(m_bgColor);
 
-	switch (result)
-	{
-	case GameResult::Clear:
-		titleText = U"MISSION CLEAR";
-		subText = U"残り時間: " + Fmt(U"{:.2f}")(getData().remainingTime) + U"秒";
-		bgColor = Palette::White;  // クリアは白背景
-		textColor = Palette::Black;
-		break;
+	FontAsset(U"TitleFont")(m_titleText)
+		.drawAt(Scene::Center().movedBy(0, -50), m_textColor);
 
-	case GameResult::TimeUp:
-		titleText = U"TIME OVER";
-		subText = U"作戦失敗：時間切れ";
-		bgColor = Palette::Black;  // 失敗は黒背景
-		textColor = Palette::Red;
-		break;
+	FontAsset(U"MenuFont")(m_subText)
+		.drawAt(Scene::Center().movedBy(0, 50), m_textColor);
 
-	case GameResult::Explosion:
-		titleText = U"YOU DIED";
-		subText = U"作戦失敗：爆発";
-		bgColor = Palette::Red;    // 死亡は赤背景
-		textColor = Palette::Black;
-		break;
-
-	default:
-		break;
-	}
-
-	Scene::SetBackground(bgColor);
-
-	FontAsset(U"TitleFont")(titleText).drawAt(Scene::Center().movedBy(0, -50), textColor);
-	FontAsset(U"MenuFont")(subText).drawAt(Scene::Center().movedBy(0, 50), textColor);
-
-	FontAsset(U"MenuFont")(U"Click to Return").drawAt(Scene::Center().movedBy(0, 150), textColor);
+	FontAsset(U"MenuFont")(U"Click to Return")
+		.drawAt(Scene::Center().movedBy(0, 150), m_textColor);
 }
