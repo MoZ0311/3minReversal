@@ -4,8 +4,9 @@
 using namespace Assets;
 Game::Game(const InitData& init)
 	: IScene{ init }
+	, m_bombTexture{ U"image/bomb.png" }
 	, m_timer{ 3min }
-	, m_timeBomb{}
+	, m_question{}
 	, m_messageWindow{}
 {
 	Scene::SetBackground(ColorF(0.2, 0.2, 0.25));
@@ -19,8 +20,14 @@ Game::Game(const InitData& init)
 
 void Game::update()
 {
-	m_timeBomb.update();
-	m_messageWindow.update();
+	if (m_messageWindow.completedCSV)
+	{
+		m_question.update();
+	}
+	else
+	{
+		m_messageWindow.update();
+	}
 
 	// 1. 時間切れチェック
 	if (m_timer.reachedZero())
@@ -33,8 +40,8 @@ void Game::update()
 		changeScene(U"Result");
 	}
 
-	// (開発用) 強制的にクリアするテストキー: [C]
-	if (KeyC.down())
+	// 指定の正解数を達成したとき/強制的にクリアするテストキー: [C]
+	if (m_question.correctAnswerCount >= 10 || KeyC.down())
 	{
 		m_timer.pause(); // タイマーを止める
 		getData().result = GameResult::Clear;
@@ -42,8 +49,8 @@ void Game::update()
 		changeScene(U"Result");
 	}
 
-	// (開発用) 強制的に爆発するテストキー: [E]
-	if (KeyE.down())
+	// 間違えたボタンを押したとき
+	if (m_question.isWrongAnswer)
 	{
 		getData().result = GameResult::Explosion;
 		getData().remainingTime = 0.0;
@@ -59,8 +66,17 @@ void Game::update()
 
 void Game::draw() const
 {
-	m_timeBomb.draw(m_messageWindow.completedCSV);
-	m_messageWindow.draw();
+	// 爆弾のテクスチャ描画
+	m_bombTexture.scaled(0.5).drawAt(Scene::Center());
+
+	if (m_messageWindow.completedCSV)
+	{
+		m_question.draw();
+	}
+	else
+	{
+		m_messageWindow.draw();
+	}
 
 	// --- タイマー表示（計算式を修正） ---
 	// 残り時間を「整数（int）」の秒数として取り出す

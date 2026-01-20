@@ -26,6 +26,8 @@ private:
 	// ページ送り/全文表示の処理
 	void getNextMessage();
 
+	const RoundRect m_textWindow;
+
 	// 読み込むCSVファイル
 	CSV m_csv;
 

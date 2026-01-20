@@ -9,6 +9,10 @@ using namespace Assets;
 
 MessageWindow::MessageWindow()
 	: completedCSV{ false }
+	, m_textWindow{
+		0, Scene::Size().y - MessageWindowHeight,
+		Scene::Size().x, MessageWindowHeight, BorderRadius
+	}
 	, m_csv{}
 	, m_rowIndex{ 0 }
 	, m_messageText{}
@@ -40,7 +44,7 @@ void MessageWindow::update()
 	}
 
 	// 左クリックでテキスト送り
-	if (MouseL.down())
+	if (m_textWindow.leftClicked())
 	{
 		getNextMessage();
 	}	
@@ -49,11 +53,7 @@ void MessageWindow::update()
 void MessageWindow::draw() const
 {
 	// ウィンドウ描画
-	const RoundRect textWindow{
-		0, Scene::Size().y - MessageWindowHeight,
-		Scene::Size().x, MessageWindowHeight, BorderRadius
-	};
-	textWindow.draw(Palette::Midnightblue).drawFrame(FrameThickness, 0, ColorF{ 0.8 });
+	m_textWindow.draw(Palette::Midnightblue).drawFrame(FrameThickness, 0, ColorF{ 0.8 });
 
 	// テキスト描画
 	FontAsset(Mamelon)(m_messageText.substr(0, static_cast<size_t>(m_displayTextLength))).draw(FontSize, FrameThickness * 2 + FontSize / 2.0, Scene::Size().y - MessageWindowHeight + FontSize / 2.0);

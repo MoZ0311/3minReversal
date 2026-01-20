@@ -8,10 +8,6 @@ using namespace Assets;
 
 void Main()
 {
-	FontAsset::Register(U"TitleFont", 80, Typeface::Heavy);
-	FontAsset::Register(U"SubFont", 30, Typeface::Bold);
-	FontAsset::Register(U"MenuFont", 24, Typeface::Regular);
-
 	Assets::RegisterAssets();
 
 	App manager;

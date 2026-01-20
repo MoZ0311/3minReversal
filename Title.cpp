@@ -26,7 +26,7 @@ void Title::draw() const
 	const Point center = Scene::Center();
 
 	// 1. サブタイトル（少し暗い赤）
-	FontAsset(U"SubFont")(U"3分クライマックス・リーサルパズル")
+	FontAsset(U"SubFont")(U"3分クライマックスパズル")
 		.drawAt(center.movedBy(0, -120), ColorF(0.7, 0.0, 0.0));
 
 	// 2. メインタイトル（鮮やかな赤）
