@@ -1,6 +1,9 @@
 ﻿# pragma once
 # include "Common.hpp"
 
+# include "TimeBomb.hpp"
+# include "MessageWindow.hpp"
+
 class Game : public App::Scene
 {
 public:
@@ -11,8 +14,8 @@ public:
 private:
 	// ★修正：Stopwatch ではなく Timer を使います
 	Timer m_timer;
-
-	Rect m_rectRed;
-	Rect m_rectBlue;
-	Rect m_rectYellow;
+	
+	// 追加実装
+	TimeBomb m_timeBomb;
+	MessageWindow m_messageWindow;
 };

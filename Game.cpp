@@ -1,21 +1,27 @@
 ﻿# include "Game.hpp"
+# include "Config.hpp"
 
+using namespace Assets;
 Game::Game(const InitData& init)
 	: IScene{ init }
+	, m_timer{ 3min }
+	, m_timeBomb{}
+	, m_messageWindow{}
 {
 	Scene::SetBackground(ColorF(0.2, 0.2, 0.25));
 
-	// ★修正：Timerに「3分」をセットして開始
-	m_timer.set(3min);
-	m_timer.start();
+	// 最初のCSV設定
+	m_messageWindow.setCSV(Assets::PrologueCSV);
 
-	m_rectRed = Rect(150, 300, 100, 200);
-	m_rectBlue = Rect(350, 300, 100, 200);
-	m_rectYellow = Rect(550, 300, 100, 200);
+	// タイマースタート
+	m_timer.start();
 }
 
 void Game::update()
 {
+	m_timeBomb.update();
+	m_messageWindow.update();
+
 	// 1. 時間切れチェック
 	if (m_timer.reachedZero())
 	{
@@ -43,10 +49,19 @@ void Game::update()
 		getData().remainingTime = 0.0;
 		changeScene(U"Result");
 	}
+
+	// 時間切れ用のデバッグキー: [T]
+	if (KeyT.down())
+	{
+		m_timer.set(0s);
+	}	
 }
 
 void Game::draw() const
 {
+	m_timeBomb.draw(m_messageWindow.completedCSV);
+	m_messageWindow.draw();
+
 	// --- タイマー表示（計算式を修正） ---
 	// 残り時間を「整数（int）」の秒数として取り出す
 	const int32 timeLeft = (int32)m_timer.remaining().count();
@@ -57,17 +72,5 @@ void Game::draw() const
 
 	// 表示（00:00 形式）
 	FontAsset(U"TitleFont")(Fmt(U"{:02}:{:02}")(m, s))
-		.drawAt(Scene::Center().x, 100, Palette::White);
-
-
-	// --- レバー描画 ---
-	m_rectRed.draw(Palette::Red);
-	m_rectBlue.draw(Palette::Blue);
-	m_rectYellow.draw(Palette::Yellow);
-
-	FontAsset(U"MenuFont")(U"SAFE").drawAt(m_rectRed.bottomCenter().movedBy(0, 30));
-	FontAsset(U"MenuFont")(U"DANGER").drawAt(m_rectBlue.bottomCenter().movedBy(0, 30));
-	FontAsset(U"MenuFont")(U"SAFE").drawAt(m_rectYellow.bottomCenter().movedBy(0, 30));
-
-	FontAsset(U"MenuFont")(U"「最初に疑え」").drawAt(Scene::Center().x, 200, Palette::Gray);
+		.drawAt(Scene::Center().x, 50, Palette::White);
 }
