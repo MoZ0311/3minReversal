@@ -4,10 +4,12 @@
 using namespace Assets;
 Game::Game(const InitData& init)
 	: IScene{ init }
+	, m_targetCount{ 30 }
 	, m_bombTexture{ U"image/bomb.png" }
 	, m_timer{ 3min }
 	, m_question{}
 	, m_messageWindow{}
+	, m_hint{}
 {
 	Scene::SetBackground(ColorF(0.2, 0.2, 0.25));
 
@@ -23,6 +25,7 @@ void Game::update()
 	if (m_messageWindow.completedCSV)
 	{
 		m_question.update();
+		m_hint.update();
 	}
 	else
 	{
@@ -41,7 +44,7 @@ void Game::update()
 	}
 
 	// 指定の正解数を達成したとき/強制的にクリアするテストキー: [C]
-	if (m_question.correctAnswerCount >= 10 || KeyC.down())
+	if (m_question.correctAnswerCount >= m_targetCount || KeyC.down())
 	{
 		m_timer.pause(); // タイマーを止める
 		getData().result = GameResult::Clear;
@@ -72,6 +75,7 @@ void Game::draw() const
 	if (m_messageWindow.completedCSV)
 	{
 		m_question.draw();
+		m_hint.draw();
 	}
 	else
 	{

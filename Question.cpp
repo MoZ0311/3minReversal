@@ -57,9 +57,6 @@ void Question::update()
 		m_currentColor = None;
 	}
 
-	// debug
-	Print << correctAnswerCount;
-
 	if (KeyW.down())
 	{
 		isWrongAnswer = true;

@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Hint.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MessageWindow.cpp" />
     <ClCompile Include="Question.cpp" />
@@ -331,6 +332,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.hpp" />
+    <ClInclude Include="Hint.hpp" />
     <ClInclude Include="MessageWindow.hpp" />
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="Game.hpp" />

@@ -3,6 +3,7 @@
 
 # include "Question.hpp"
 # include "MessageWindow.hpp"
+# include "Hint.hpp"
 
 class Game : public App::Scene
 {
@@ -13,6 +14,9 @@ public:
 
 private:
 
+	// 必要な正解数
+	const int32 m_targetCount;
+
 	// 時限爆弾の画像テクスチャ
 	const Texture m_bombTexture;
 
@@ -22,4 +26,5 @@ private:
 	// 追加実装
 	Question m_question;
 	MessageWindow m_messageWindow;
+	Hint m_hint;
 };
